@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div>
+        <h3 th:text="'欢迎您：：' + ${session.tname}"></h3>
+        <p>你好</p>
+    </div>
+</head>
+<body>
+<a href="/login" target="_self">注销</a>
+<a href="/returnTest" target="_self">跳转</a>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jxust.mapper.PersonMapper">
+
+	<resultMap id="result" type="com.jxust.entity.Person">
+	<result property="id" column="id" />
+	<result property="age" column="age" />
+	<result property="name" column="name"/>
+	</resultMap>
+
+	<!--无条件查询-->
+	<select id="findPerson" resultType="com.jxust.entity.Person">
+	   SELECT
+	     name as name,
+         age as age
+	     FROM Person
+	 </select>
+	<!--有条件查询-->
+    <select id="getPersonById"  parameterType="Integer" resultType="com.jxust.entity.Person">
+	   SELECT
+	     *
+	     FROM Person WHERE id = #{id}
+	 </select>
+		<!--新增-->
+	<insert id="InsertPerson"   parameterType="com.jxust.entity.Person" keyProperty="id" useGeneratedKeys="true">
+   	insert  into Person(age,name)
+   	values (#{age,jdbcType=INTEGER},#{name,jdbcType=VARCHAR})
+	</insert>
+	<!--删除-->
+	<delete id="DeletePerson"  parameterType="int">
+		delete from person where id=#{id}
+	</delete>
+	<!--修改-->
+	<update id="UpdatePerson" parameterType="com.jxust.entity.Person">
+		  update person set age=#{age},name=#{age} where person.id=#{id}
+	</update>
+
+
+</mapper>

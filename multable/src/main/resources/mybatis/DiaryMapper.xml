@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yto.mapper.DiaryMapper">
+    <resultMap type="com.yto.bean.Diary" id="DiaryMap">
+        <id property="id" column="_id" />
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="pubTime" column="pub_time" javaType="java.sql.Date" />
+        <association property="user" column="user_id"
+                     javaType="com.yto.bean.User">
+            <id property="id" column="uId" />
+            <result property="username" column="username" />
+            <result property="sex" column="sex" />
+            <result property="sign" column="sign" />
+            <result property="photo" column="photo" />
+            <result property="age" column="age" />
+        </association>
+        <collection property="tag" ofType="com.yto.bean.Tag"
+                    column="_id" select="com.yto.mapper.TagMapper.getTagsByDiaryId">
+        </collection>
+    </resultMap>
+
+    <update id="updateDiary" parameterType="com.yto.bean.Diary">
+        update diary set
+        title=#{title},content=#{content}, pub_time=#{pubTime}
+        where _id=#{id}
+    </update>
+
+    <delete id="deleteDiary" parameterType="int">
+        delete from diary where
+        _id=#{id}
+    </delete>
+    <insert id="insertDiary" useGeneratedKeys="true" keyProperty="id" parameterType="com.yto.bean.Diary">
+        insert into diary(title,content,pub_time,user_id)
+        values(#{title},#{content},#{pubTime},#{userId})
+    </insert>
+
+
+
+    <select id="getDiaryById" parameterType="int" resultMap="DiaryMap">
+        select
+        d._id,d.title,d.content,d.pub_time,d.user_id,u._id as
+        uId,u.username,u.sex,u.sign,u.photo,u.age
+        from diary d left join users u on
+        d.user_id=u._id where d._id=#{id}
+    </select>
+
+    <select id="getAllDiary" resultMap="DiaryMap">
+        select
+        d._id,d.title,d.content,d.pub_time,d.user_id,u._id as
+        uId,u.username,u.sex,u.sign,u.photo,u.age
+        from diary d inner join users u on
+        d.user_id=u._id
+    </select>
+
+    <resultMap type="com.yto.bean.Diary" id="DiaryMap2">
+        <id property="id" column="_id" />
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="pubTime" column="pub_time" javaType="java.sql.Date" />
+        <result property="userId" column="user_id" />
+        <association property="user" column="user_id"
+                     javaType="com.yto.bean.User" select="com.yto.mapper.UserMapper.getUserById">
+        </association>
+        <collection property="tag" ofType="com.yto.bean.Tag"
+                    column="_id" select="com.yto.mapper.TagMapper.getTagsByDiaryId">
+        </collection>
+    </resultMap>
+
+    <select id="getDiaryByIdOnly" parameterType="int" resultMap="DiaryMap2">
+        select
+        * from diary where _id=#{id}
+    </select>
+
+</mapper>

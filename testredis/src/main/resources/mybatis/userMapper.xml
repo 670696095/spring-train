@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yto.testredis.mapper.UserMapper">
+    <resultMap type="com.yto.testredis.bean.User" id="UserMap">
+        <id property="userId" column="userId" />
+        <result property="userName" column="userName" />
+        <result property="userSex" column="userSex" />
+        <result property="userPhone" column="userPhone" />
+        <result property="userType" column="userType" />
+        <result property="userFlag" column="userFlag" />
+        <result property="userPass" column="userPass"/>
+        <result property="userTypes" column="userTypes" />
+        <result property="regDate" column="regDate" />
+        <result property="realName" column="realName"/>
+    </resultMap>
+    <select id="getUserById" parameterType="int" resultMap="UserMap">
+        select * from user where userId=#{userId}
+    </select>
+    <select id="getListUser" resultType="com.yto.testredis.bean.User">
+        select * from user
+    </select>
+    <select id="selectUserByUsernameAndPsw" parameterType="String" resultMap="UserMap">
+       select * from user where userName=#{userName} and userPass=#{userPass}
+    </select>
+    <select id="findByName" parameterType="String" resultMap="UserMap">
+        select * from user where userName=#{userName}
+    </select>
+    <insert id="addUser" useGeneratedKeys="true" keyProperty="userId" parameterType="com.yto.testredis.bean.User">
+        insert into user (user.userName,user.userPass,user.userSex,user.userPhone,user.userType,user.userFlag,user.regDate,user.realName)
+        values (#{userName},#{userPass},#{userSex},#{userPhone},#{userType},#{userFlag},#{regDate},#{realName})
+    </insert>
+    <delete id="delUser" parameterType="int">
+        delete from user where userId in
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+    <update id="saveUser" parameterType="com.yto.testredis.bean.User">
+        update user set
+        realName=#{realName},userSex=#{userSex},userPhone=#{userPhone},userPass=#{userPass}
+        where  userName=#{userName}
+    </update>
+
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yto.mapper.UserMapper">
+    <resultMap type="com.yto.bean.User" id="UserMap">
+        <id property="id" column="_id" />
+        <result property="username" column="username" />
+        <result property="sex" column="sex" />
+        <result property="sign" column="sign" />
+        <result property="photo" column="photo" />
+        <result property="age" column="age" />
+        <result property="psw" column="psw"/>
+    </resultMap>
+    <select id="getUserById" parameterType="int" resultMap="UserMap">
+        select * from users where _id=#{id}
+    </select>
+    <select id="selectUserByUsernameAndPsw" parameterType="String" resultMap="UserMap">
+       select username ,psw from users where username=#{username} and psw=#{psw}
+    </select>
+    <select id="findByName" parameterType="String" resultMap="UserMap">
+        select * from users where username=#{username}
+    </select>
+    <insert id="saveUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.yto.bean.User">
+        insert into users (username,psw,age)
+        values (#{username},#{psw},#{age})
+    </insert>
+
+</mapper>
